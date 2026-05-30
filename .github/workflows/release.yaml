@@ -22,6 +22,6 @@ jobs:
           tags: ${{ steps.ecr.outputs.registry }}/aws-movie-theatre:${{ github.sha }}
       - run: echo "IMAGE=${{ steps.ecr.outputs.registry }}/aws-movie-theatre:${{ github.sha }}" >> $GITHUB_ENV
       - uses: aquasecurity/trivy-action@master
-        with: { image-ref: ${{ env.IMAGE }}, severity: HIGH,CRITICAL, exit-code: 1 }
+        with: { image-ref: "${{ env.IMAGE }}", severity: "HIGH,CRITICAL", exit-code: 1 }
       - uses: sigstore/cosign-installer@v3
       - run: cosign sign --yes ${{ env.IMAGE }}
