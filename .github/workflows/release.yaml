@@ -1,0 +1,27 @@
+name: Release
+on: { push: { branches: [main] } }
+permissions: { id-token: write, contents: read }
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::143050368559:role/gh-actions-deploy
+          aws-region: us-east-1
+      - uses: aws-actions/amazon-ecr-login@v2
+        id: ecr
+      - uses: docker/setup-buildx-action@v3
+      - id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64           # match cluster node arch (t3.medium)
+          push: true
+          tags: ${{ steps.ecr.outputs.registry }}/aws-movie-theatre:${{ github.sha }}
+      - run: echo "IMAGE=${{ steps.ecr.outputs.registry }}/aws-movie-theatre:${{ github.sha }}" >> $GITHUB_ENV
+      - uses: aquasecurity/trivy-action@master
+        with: { image-ref: ${{ env.IMAGE }}, severity: HIGH,CRITICAL, exit-code: 1 }
+      - uses: sigstore/cosign-installer@v3
+      - run: cosign sign --yes ${{ env.IMAGE }}
