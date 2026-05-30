@@ -8,5 +8,9 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: "8", cache: maven }
       - run: mvn -B verify
-      - uses: semgrep/semgrep-action@v1
-        with: { config: p/owasp-top-ten }
+      - name: Semgrep
+        uses: docker://semgrep/semgrep
+        with:
+          args: semgrep ci
+        env:
+          SEMGREP_RULES: p/owasp-top-ten
