@@ -11,6 +11,8 @@ import java.io.PrintWriter;
 @WebServlet("")
 public class AwsMovieTheatreServlet extends HttpServlet {
 
+        private static final BuildInfo BUILD = BuildInfo.load();
+
         @Override
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
                 resp.setContentType("text/html");
@@ -103,6 +105,7 @@ public class AwsMovieTheatreServlet extends HttpServlet {
                 out.println("</div>");
                 out.println("<div class='disclaimer'>");
                 out.println("<p>Movie posters generated with Amazon Bedrock. AWS Movie Theatre is not a real service.</p>");
+                out.println("<p>v" + BUILD.version() + " (" + BUILD.revision() + ")</p>");
                 out.println("</div>");
                 out.println("</div>");
                 out.println("</body>");
