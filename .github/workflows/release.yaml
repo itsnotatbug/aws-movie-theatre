@@ -70,3 +70,17 @@ jobs:
         uses: sigstore/cosign-installer@v3
       - if: steps.meta.outputs.release == 'true'
         run: cosign sign --yes ${{ steps.ecr.outputs.registry }}/aws-movie-theatre@${{ steps.push.outputs.digest }}
+
+      # 5. Generate the SBOM of the pushed image (Java libs + OS + JDK).
+      - if: steps.meta.outputs.release == 'true'
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ steps.ecr.outputs.registry }}/aws-movie-theatre@${{ steps.push.outputs.digest }}
+          format: cyclonedx-json
+          output-file: sbom.cdx.json
+
+      # 6. Attest the SBOM to the exact digest with cosign (keyless, same OIDC
+      #    identity as the signature). Stored as a registry artifact next to
+      #    the .sig; verify/pull later with cosign verify-attestation.
+      - if: steps.meta.outputs.release == 'true'
+        run: cosign attest --yes --type cyclonedx --predicate sbom.cdx.json ${{ steps.ecr.outputs.registry }}/aws-movie-theatre@${{ steps.push.outputs.digest }}
