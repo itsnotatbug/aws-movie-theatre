@@ -15,7 +15,7 @@ jobs:
           aws-region: us-east-1
       - uses: aws-actions/amazon-ecr-login@v2
         id: ecr
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@v4
 
       # 0. Derive version + release flag from the git ref. This is why the
       #    workflow never changes per release: the tag name IS the version.
