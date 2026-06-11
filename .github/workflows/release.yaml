@@ -33,7 +33,7 @@ jobs:
 
       # 1. Build locally and load into the runner's docker. Do NOT push yet.
       - id: build-local
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           platforms: linux/amd64 # match cluster node arch (t3.medium)
@@ -58,7 +58,7 @@ jobs:
       #    buildx cache, so this does not actually rebuild. Capture the digest.
       - id: push
         if: steps.meta.outputs.release == 'true'
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           platforms: linux/amd64
