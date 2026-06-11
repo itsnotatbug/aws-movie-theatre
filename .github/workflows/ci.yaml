@@ -6,7 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: "8", cache: maven }
+        with: { distribution: temurin, java-version: "25", cache: maven }
       - run: mvn -B verify
       - name: Semgrep
         uses: docker://semgrep/semgrep

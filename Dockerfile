@@ -1,4 +1,4 @@
-FROM maven:3.9-eclipse-temurin-21 AS build
+FROM maven:3.9-eclipse-temurin-25 AS build
 ARG APP_VERSION=1.0.0
 ARG GIT_REVISION=unknown
 WORKDIR /app
@@ -7,7 +7,7 @@ RUN mvn -B dependency:go-offline
 COPY src ./src
 RUN mvn -B package -DskipTests -Drevision=${APP_VERSION} -Dgit.revision=${GIT_REVISION}
 
-FROM tomcat:9.0-jdk21
+FROM tomcat:9.0-jdk25
 ARG APP_VERSION=1.0.0
 ARG GIT_REVISION=unknown
 LABEL org.opencontainers.image.version="${APP_VERSION}" \

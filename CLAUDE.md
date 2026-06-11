@@ -23,12 +23,12 @@ mvn clean package
 Single-servlet Java WAR app — no framework, no templating engine.
 
 - **`AwsMovieTheatreServlet.java`** — the entire application. One `doGet` method that writes a full HTML page inline using `PrintWriter`. Images are served as static files by the servlet container.
-- **`pom.xml`** — packages as `war`, `finalName=ROOT` so the WAR deploys to the root context (`/`) of Tomcat. Java 8 source compatibility. Only runtime dependency is `javax.servlet-api` (provided).
+- **`pom.xml`** — packages as `war`, `finalName=ROOT` so the WAR deploys to the root context (`/`) of Tomcat. Java 25 source compatibility. Only runtime dependency is `javax.servlet-api` (provided).
 - **Image pipeline** — source images live in `images/`. `build.sh` copies them into `src/main/webapp/images/` before Maven packages them into the WAR. If you skip `build.sh` and run `mvn` directly, the images must already be in `src/main/webapp/images/`.
 
 ## Docker
 
-Multi-stage build: Maven builds the WAR, then `tomcat:9.0-jdk21` serves it. Tomcat 9 is required — the app uses `javax.servlet` (Servlet 3.1), which is incompatible with Tomcat 10+ (jakarta.servlet). Runtime stage runs as non-root user `app`.
+Multi-stage build: Maven builds the WAR, then `tomcat:9.0-jdk25` serves it. Tomcat 9 is required — the app uses `javax.servlet` (Servlet 3.1), which is incompatible with Tomcat 10+ (jakarta.servlet). Runtime stage runs as non-root user `app`.
 
 ```bash
 docker build -t movie-theatre:local .

@@ -69,7 +69,7 @@ aws-movie-theatre/
 
 ## Requirements
 
-- Java 8 (OpenJDK)
+- Java 25 (OpenJDK)
 - Maven 3.x
 - Tomcat 9
 - AWS CLI (for image generation only)
